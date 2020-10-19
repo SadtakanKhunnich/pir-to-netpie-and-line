@@ -1,0 +1,59 @@
+import microgear.client as microgear
+import logging
+import time
+import RPi.GPIO as GPIO
+import requests
+
+GPIO.setmode(GPIO.BCM)
+GPIO.cleanup()
+GPIO.setwarnings(False)
+GPIO.setup(17,GPIO.OUT)
+GPIO.setup(27,GPIO.OUT)
+GPIO.setup(24,GPIO.IN)
+appid = "netpie_appid"
+gearkey = "netpie_gearkey"
+gearsecret = "netpie_secret"
+
+microgear.create(gearkey,gearsecret,appid,{'debugmode': True})
+
+def connection():
+    logging.info("Now I am connected with netpie")
+
+def subscription(topic,message):
+ logging.info(topic+" : "+message)
+
+ msg = str(message)[2:-1]
+    
+ 
+ while True:
+     i = GPIO.input(24)
+     print(i)
+     if(i == 0) :
+        GPIO.output(17, GPIO.LOW)
+        GPIO.output(27, GPIO.LOW)
+        print("no intruders",i)
+        print("LED off")
+        print(message)
+     elif(i == 1):
+        GPIO.output(17, GPIO.HIGH)
+        GPIO.output(27, GPIO.HIGH)
+        url = 'https://notify-api.line.me/api/notify'
+        token = 'your line token'
+        headers = {'content-type':'application/x-www-form-urlencoded','Authorization':'Bearer '+token}
+
+        msg = 'intruder detect'
+        r = requests.post(url, headers=headers, data = {'message':msg})
+
+        print(r.text)
+        time.sleep(10)
+        print("LED OFF")
+        print(message)
+def disconnect():
+    logging.info("disconnected")
+
+microgear.setalias("led1")
+microgear.on_connect = connection
+microgear.on_message = subscription
+microgear.on_disconnect = disconnect
+microgear.subscribe("/led")
+microgear.connect(True)
