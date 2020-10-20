@@ -1,5 +1,8 @@
-# pir-to-netpie-and-line \n
-install microgear with command  <sudo pip install microgear>   inraspberry pi\n
-led 1 connect pin17 \n
-led 2 connect pin27 \n
-pir sensor connect pin24 \n
+# pir-to-netpie-and-line 
+install microgear with command  <sudo pip install microgear>   inraspberry pi
+  
+led 1 connect pin17 
+
+led 2 connect pin27 
+
+pir sensor connect pin24 
