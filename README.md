@@ -1,4 +1,5 @@
 # pir-to-netpie-and-line 
+
 install microgear with command  <sudo pip install microgear>   inraspberry pi
   
 led 1 connect pin17 
